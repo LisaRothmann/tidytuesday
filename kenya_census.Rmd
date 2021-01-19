@@ -1,0 +1,33 @@
+---
+title: "kenya_census"
+author: "LAR"
+date: "19/01/2021"
+output: word_document
+---
+
+# knitr
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# library
+```{r}
+library(tidyverse)
+library(tidytuesdayR)
+```
+
+# load data
+```{r}
+kenya_census <- tidytuesdayR::tt_load(2021, week = 4)
+```
+
+# explore
+```{r}
+str(kenya_census) #have a look what is available
+#oh nice - crops!
+
+crops <- kenya_census$crops
+str(crops)
+glimpse(crops)
+```
