@@ -15,6 +15,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(tidytuesdayR)
+library(rnaturalearth)  
+library(sp)
+library(ggthemes)
+
+library(maptools)
+library(raster)
+library(rgdal)
+library(remotes)
 ```
 
 # load data
@@ -31,3 +39,43 @@ crops <- kenya_census$crops
 str(crops)
 glimpse(crops)
 ```
+# map
+```{r}
+sp::plot(ne_states(country = 'kenya')) 
+```
+#plot
+```{r}
+crops %>% 
+  select(-Farming) %>% 
+gather(crop, population, 2:10) %>%
+  ggplot()+
+  geom_col(aes(crop, population))+
+  labs(
+    x = "Crop",
+    y = "Kenyan Farming Population")+
+  theme_clean()
+```
+# map
+```{r}
+#long 
+df <- crops %>% 
+      dplyr::select(-Farming) %>% 
+      gather(crop, population, 2:10)
+
+remotes::install_github("Shelmith-Kariuki/rKenyaCensus")
+county <- rKenyaCensus::V2_T1.2
+
+df2 <- df %>% 
+  full_join(county) %>% 
+  full_join(
+data.frame(rKenyaCensus::CountyGPS))
+
+kenya <- ne_states(country = 'kenya', returnclass = "sf")
+
+
+ggplot()+
+  geom_sf(data = kenya)+
+  geom_jitter(data = df2, aes(Longitude, Latitude, fill = crop))+
+  theme_minimal()
+```
+
