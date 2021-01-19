@@ -79,3 +79,5 @@ ggplot()+
   theme_minimal()
 ```
 
+let me see and learn from others how they did it: 
+https://github.com/jack-davison/TidyTuesday/blob/master/R/2021_01_19_kenya.R
